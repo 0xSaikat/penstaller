@@ -6,7 +6,7 @@ import os
 from termcolor import colored
 from pyfiglet import Figlet
 
-# Slow print function for hacking vibe
+
 def slow_print(text, color=None, delay=0.05):
     for char in text:
         sys.stdout.write(colored(char, color) if color else char)
@@ -14,16 +14,16 @@ def slow_print(text, color=None, delay=0.05):
         time.sleep(delay)
     print()
 
-# Print a box around text
+
 def print_box(text, color="cyan"):
     border = "═" * (len(text) + 4)
     slow_print(f"╔{border}╗", color)
     slow_print(f"║  {text}  ║", color)
     slow_print(f"╚{border}╝", color)
 
-# Banner
+
 def print_banner():
-    os.system("clear")  # Clear the terminal for a clean start
+    os.system("clear")  
     banner = """╭─────[By 0xSaikat]─────────────────────────────────────────────╮
 │                                                               │
 │     ____                  __        ____                      │
@@ -35,7 +35,7 @@ def print_banner():
 ╰──────────────────────────────────────────[hackbit.org]────────╯"""
     slow_print(banner, "green")
 
-# Function to run shell commands
+
 def run_command(command, shell=False):
     try:
         if shell:
@@ -46,7 +46,7 @@ def run_command(command, shell=False):
     except subprocess.CalledProcessError:
         return False
 
-# Function to install packages
+
 def install_package(pkg):
     slow_print(f"[!] {pkg} is not installed. Preparing to install...", "yellow")
     start_time = time.time()
@@ -77,7 +77,7 @@ def install_package(pkg):
         slow_print(f"[!] Unable to install {pkg}, please try manually", "red")
         return False
 
-# Function to install tools
+
 def install_tool(tool):
     slow_print(f"[!] {tool} is not installed. Preparing to install...", "yellow")
     start_time = time.time()
@@ -107,7 +107,7 @@ def install_tool(tool):
         elif tool == "subfinder":
             success = run_command("go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest && sudo mv $(go env GOPATH)/bin/subfinder /usr/bin/", shell=True)
         else:
-            # Default to go install for remaining tools
+            
             success = run_command(f"go install -v github.com/projectdiscovery/{tool}/cmd/{tool}@latest && sudo mv $(go env GOPATH)/bin/{tool} /usr/bin/ 2>/dev/null", shell=True)
 
         if success:
@@ -122,11 +122,11 @@ def install_tool(tool):
         slow_print(f"[!] Error installing {tool}: {str(e)}", "red")
         return False
 
-# Function to check if a command is available
+
 def is_installed(command):
     return subprocess.run(["which", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode == 0
 
-# Function to display installation summary
+
 def display_summary(successful_installs, failed_installs):
     print("\n")
     print_box("Installation Summary", "cyan")
@@ -139,11 +139,11 @@ def display_summary(successful_installs, failed_installs):
         for tool in failed_installs:
             slow_print(f"  - {tool}", "red")
 
-# Main function
+
 def main():
     print_banner()
 
-    # List of packages to install
+    
     packages = ["unzip", "wget", "go", "cmake", "pip", "cargo", "ruby"]
     successful_installs = []
     failed_installs = []
@@ -157,7 +157,7 @@ def main():
         else:
             slow_print(f"[^] {pkg} is already installed in your system!", "blue")
 
-    # List of tools to install (combined from both scripts plus new tools)
+    
     tools = ["xsstrike", "dalfox", "puredns", "httprobe", "naabu", "hakrawler", "gospider", 
              "LinkFinder", "SecretFinder", "subjs", "xnLinkFinder", "cors", "gobuster", "nikto",
              "wpscan", "jq", "x8", "urldedupe", "qsreplace", "gau", "gf", "waybackurls", "uro",
@@ -174,10 +174,10 @@ def main():
         else:
             slow_print(f"[^] {tool} is already installed in your system!", "blue")
 
-    # Display installation summary
+    
     display_summary(successful_installs, failed_installs)
 
-    # Thank you message
+    
     print("\n")
     print_box("Thank you for using Penstaller!", "green")
     slow_print("Happy Hacking! 🚀", "cyan")
