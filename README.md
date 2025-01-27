@@ -54,7 +54,7 @@ To use FindME, follow these steps:
 
 1. ### Clone the repository:
    ```bash
-   https://github.com/0xSaikat/penstaller.git
+   git clone https://github.com/0xSaikat/penstaller.git
    cd penstaller
 2. ### Install the required dependencies:
    ```bash
