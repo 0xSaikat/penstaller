@@ -4,7 +4,7 @@
 
 Penstaller is a Python-based automation tool designed to simplify the installation of essential bug bounty and penetration testing tools. With just one command, Penstaller sets up your system with all the necessary tools for reconnaissance, fuzzing, web vulnerability scanning, and more. It ensures a clean and efficient setup, saving you time and effort when configuring new environments for bug hunting or security testing. Perfect for both beginners and seasoned professionals, Penstaller keeps your system lightweight and ready for action.
 
-![Screenshot](https://github.com/)
+![Screenshot](cover.png)
 
 ----
 
