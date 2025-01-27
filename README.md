@@ -106,7 +106,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <br>
 <br>
 
-<h6 align="center">By the Hacker for the Hacker!</h6>
+<h6 align="center">By the Hackers for the Hackers!</h6>
 
 <div align="center">
   <a href="https://github.com/0xSaikat"><img src="https://img.icons8.com/material-outlined/20/808080/github.png" alt="GitHub"></a>
