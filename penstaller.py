@@ -36,6 +36,29 @@ def print_banner():
     slow_print(banner, "green")
 
 
+def check_admin_privileges():
+    try:
+        result = subprocess.run(['id', '-u'], capture_output=True, text=True)
+        return result.stdout.strip() == '0'
+    except Exception:
+        return False
+
+
+def get_admin_privileges():
+    if check_admin_privileges():
+        return True
+    
+    slow_print("[!] Administrative privileges are required to install the tools.", "yellow")
+    slow_print("[!] Please enter your password when prompted.", "yellow")
+    
+    try:
+        subprocess.run(['sudo', 'echo', "Administrative privileges confirmed."], check=True)
+        return True
+    except subprocess.CalledProcessError:
+        slow_print("[!] Failed to obtain administrative privileges.", "red")
+        return False
+
+
 def run_command(command, shell=False):
     try:
         if shell:
@@ -87,13 +110,28 @@ def install_tool(tool):
             success = run_command(["pip3", "install", "xsstrike"])
         elif tool == "dalfox":
             success = run_command("wget https://github.com/hahwul/dalfox/releases/download/v2.9.2/dalfox_2.9.2_linux_amd64.tar.gz && tar xvf dalfox_2.9.2_linux_amd64.tar.gz && sudo mv dalfox /usr/bin/ && rm -rf dalfox_2.9.2_linux_amd64.tar.gz README.md LICENSE.txt", shell=True)
-        elif tool == "pii":
-            success = run_command("git clone https://github.com/1hehaq/pii.git && cd pii && pip3 install -r requirements.txt && sudo python3 setup.py install && cd .. && rm -rf pii", shell=True)
         elif tool == "pdsi":
             success = run_command(["go", "install", "github.com/1hehaq/pdsi@latest"])
         elif tool == "ghauri":
             success = run_command("git clone https://github.com/r0oth3x49/ghauri.git && cd ghauri && pip3 install -r requirements.txt && python3 setup.py install && cd .. && rm -rf ghauri", shell=True)
-        # Add all tools from 3pleb.sh
+        elif tool == "feroxbuster":
+            success = run_command("wget https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster_amd64_linux.zip && unzip feroxbuster_amd64_linux.zip && sudo mv feroxbuster /usr/bin/ && rm -f feroxbuster_amd64_linux.zip", shell=True)
+        elif tool == "shhgit":
+            success = run_command("go install github.com/eth0izzle/shhgit@latest && sudo mv $(go env GOPATH)/bin/shhgit /usr/bin/", shell=True)
+        elif tool == "jaeles":
+            success = run_command("go install github.com/jaeles-project/jaeles@latest && sudo mv $(go env GOPATH)/bin/jaeles /usr/bin/", shell=True)
+        elif tool == "crlfuzz":
+            success = run_command("go install github.com/dwisiswant0/crlfuzz/cmd/crlfuzz@latest && sudo mv $(go env GOPATH)/bin/crlfuzz /usr/bin/", shell=True)
+        elif tool == "unfurl":
+            success = run_command("go install github.com/tomnomnom/unfurl@latest && sudo mv $(go env GOPATH)/bin/unfurl /usr/bin/", shell=True)
+        elif tool == "graphqlmap":
+            success = run_command("git clone https://github.com/swisskyrepo/GraphQLmap && cd GraphQLmap && pip3 install -r requirements.txt && sudo ln -sf $(pwd)/graphqlmap.py /usr/bin/graphqlmap && cd ..", shell=True)
+        elif tool == "kxss":
+            success = run_command("go install github.com/Emoe/kxss@latest && sudo mv $(go env GOPATH)/bin/kxss /usr/bin/", shell=True)
+        elif tool == "ssrf-sheriff":
+            success = run_command("go install github.com/teknogeek/ssrf-sheriff@latest && sudo mv $(go env GOPATH)/bin/ssrf-sheriff /usr/bin/", shell=True)
+        elif tool == "smuggler":
+            success = run_command("git clone https://github.com/defparam/smuggler.git && cd smuggler && sudo ln -sf $(pwd)/smuggler.py /usr/bin/smuggler && cd ..", shell=True)
         elif tool in ["hakrawler", "nikto", "nmap", "dirsearch", "amass", "sublist3r", "assetfinder", "nuclei", "massdns", "sqlmap"]:
             success = run_command(["sudo", "apt-get", "install", "-y", tool])
         elif tool in ["xnLinkFinder", "cors", "uro", "arjun"]:
@@ -142,6 +180,13 @@ def display_summary(successful_installs, failed_installs):
 
 def main():
     print_banner()
+    
+    
+    slow_print("[*] Checking for administrative privileges...", "yellow")
+    if not get_admin_privileges():
+        slow_print("[!] This script requires administrative privileges to install tools.", "red")
+        slow_print("[!] Please run the script again with sudo or as root.", "red")
+        return
 
     
     packages = ["unzip", "wget", "go", "cmake", "pip", "cargo", "ruby"]
@@ -163,7 +208,11 @@ def main():
              "wpscan", "jq", "x8", "urldedupe", "qsreplace", "gau", "gf", "waybackurls", "uro",
              "ffuf", "anew", "subfinder", "httpx", "nmap", "dirsearch", "amass", "sublist3r",
              "assetfinder", "nuclei", "massdns", "shuffledns", "paramspider", "arjun", "katana",
-             "sqlmap", "ghauri", "pii", "pdsi"]
+             "sqlmap", "ghauri", "pdsi",
+             
+             "feroxbuster", "shhgit", "jaeles", "crlfuzz", "unfurl", "graphqlmap", "kxss",
+             "ssrf-sheriff", "smuggler", "dnsx", "interactsh", "notify", "asnmap", "tlsx",
+             "uncover", "mapcidr", "alterx", "dsieve"]
 
     for tool in tools:
         if not is_installed(tool):
